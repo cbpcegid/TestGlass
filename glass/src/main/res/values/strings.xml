@@ -11,5 +11,7 @@
     <string name="product_description">Fiche produit</string>
     <string name="product_fragment">product_fragment</string>
     <string name="title_activity_child">childActivity</string>
+    <string name="loading_image_msg">Chargement de l\'\image ....</string>
+    <string name="image_not_found">Aucune image pour cet article ....</string>
 
 </resources>

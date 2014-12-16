@@ -3,7 +3,11 @@ package com.example.mytest.testglass;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,13 +16,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import java.io.InputStream;
+import java.net.URL;
+
 
 public class ProductActivity extends Activity {
+
+    ImageView img;
+    Bitmap bitmap;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +56,8 @@ public class ProductActivity extends Activity {
             Fragment productFragment = getFragmentManager().findFragmentById(R.id.product_fragment);
             if (productFragment!=null) {
                 View productView = productFragment.getView();
+                img = (ImageView)findViewById(R.id.product_image);
+                new LoadImage().execute(json.getString("ImageUri"));
                 TextView product_label = (TextView) productView.findViewById(R.id.product_label);
                 if (product_label != null)
                     product_label.setText(json.getString("Name"));
@@ -54,10 +73,34 @@ public class ProductActivity extends Activity {
         {
             Log.e(ProductActivity.class.getName(), e.getMessage());
         }
-
-
     }
 
+    private class LoadImage extends AsyncTask<String, String, Bitmap> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(ProductActivity.this);
+            pDialog.setMessage("@string/loading_image_msg");
+            pDialog.show();
+        }
+        protected Bitmap doInBackground(String... args) {
+            try {
+                bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
+            } catch (Exception e) {
+                Log.e("LoadImage", e.getMessage());
+            }
+            return bitmap;
+        }
+        protected void onPostExecute(Bitmap image) {
+            if(image != null){
+                img.setImageBitmap(image);
+                pDialog.dismiss();
+            }else{
+                pDialog.dismiss();
+                Toast.makeText(ProductActivity.this, "@string/image_not_found", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
