@@ -1,7 +1,5 @@
 package com.example.mytest.testglass;
 
-import com.google.android.glass.timeline.DirectRenderingCallback;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,8 +10,10 @@ import android.os.SystemClock;
 import android.view.SurfaceHolder;
 import android.view.View;
 
+import com.google.android.glass.timeline.DirectRenderingCallback;
+
 /**
- * Renders a fading "Hello world!" in a {@link LiveCard}.
+ * Renders a fading "Hello world!" in a {@link com.example.mytest.testglass.LiveCardMenuActivity}.
  */
 public class LiveCardRenderer implements DirectRenderingCallback {
 
@@ -87,7 +87,7 @@ public class LiveCardRenderer implements DirectRenderingCallback {
     }
 
     /**
-     * Starts or stops rendering according to the {@link LiveCard}'s state.
+     * Starts or stops rendering according to the {@link com.example.mytest.testglass.LiveCardMenuActivity}'s state.
      */
     private void updateRenderingState() {
         boolean shouldRender = (mHolder != null) && !mRenderingPaused;

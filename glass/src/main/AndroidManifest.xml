@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mytest.testglass" >
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,6 +26,34 @@
         <activity
             android:name=".LiveCardMenuActivity"
             android:theme="@style/MenuTheme" />
+        <activity
+            android:name="com.jaxbot.glass.barcode.scan.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:stateNotNeeded="true"
+            android:theme="@style/MenuTheme"
+            android:parentActivityName=".LiveCardMenuActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+            </intent-filter>
 
-   </application>
+            <meta-data
+                android:name="com.google.android.glass.VoiceTrigger"
+                android:resource="@xml/voice_trigger" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LiveCardMenuActivity" />
+        </activity>
+        <activity
+            android:name=".childActivity"
+            android:parentActivityName=".LiveCardMenuActivity"
+            android:label="@string/title_activity_child" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LiveCardMenuActivity" />
+        </activity>
+    </application>
+
 </manifest>
