@@ -9,60 +9,64 @@
     tools:context="com.example.mytest.testglass.ProductActivity$PlaceholderFragment">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <TextView android:text="@string/product_description" android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/product_image"
             android:src="@drawable/wait"
-            android:layout_width="fill_parent"
+            android:layout_width="@dimen/product_image_height"
             android:layout_height="@dimen/product_image_height" />
-        <TextView
-            android:id="@+id/product_label"
-            android:text=".................."
-            android:layout_gravity="left"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
         <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/product_price"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="fill_parent" >
+            <TextView android:text="@string/product_description" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"/>
             <TextView
-                android:id="@+id/price_label"
-                android:text="Prix:"
-                android:layout_margin="@dimen/activity_layout_margin"
-                android:layout_width="wrap_content"
+                android:id="@+id/product_label"
+                android:text=".................."
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/price_value"
-                android:text="..."
-                android:layout_margin="@dimen/activity_layout_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/product_price"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/price_label"
+                    android:text="Prix:"
+                    android:layout_margin="@dimen/activity_layout_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/price_value"
+                    android:text="..."
+                    android:layout_margin="@dimen/activity_layout_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/product_stock"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/stock_label"
-                android:text="Stock:"
-                android:layout_margin="@dimen/activity_layout_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/stock_value"
-                android:text="..."
-                android:layout_margin="@dimen/activity_layout_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/product_stock"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/stock_label"
+                    android:text="Stock:"
+                    android:layout_margin="@dimen/activity_layout_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/stock_value"
+                    android:text="..."
+                    android:layout_margin="@dimen/activity_layout_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

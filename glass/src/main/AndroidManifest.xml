@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mytest.testglass" >
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -55,7 +56,8 @@
         </activity>
         <activity
             android:name=".ProductActivity"
-            android:label="@string/title_activity_product" >
+            android:label="@string/title_activity_product"
+            android:parentActivityName=".LiveCardMenuActivity">
         </activity>
     </application>
 

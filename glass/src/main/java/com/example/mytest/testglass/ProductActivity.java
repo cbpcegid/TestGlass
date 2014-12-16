@@ -36,69 +36,26 @@ public class ProductActivity extends Activity {
     ImageView img;
     Bitmap bitmap;
     ProgressDialog pDialog;
+    JSONObject json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get the message from the intent
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(LiveCardMenuActivity.EXTRA_MESSAGE);
+        try {
+            json = new JSONObject(message);
+            Log.i(ProductActivity.class.getName(), json.toString());
+        } catch (Exception e)
+        {
+            Log.e(ProductActivity.class.getName(), e.getMessage());
+        }
         setContentView(R.layout.activity_product);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-        }
-
-        // Get the message from the intent
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(LiveCardMenuActivity.EXTRA_MESSAGE);
-        try {
-            JSONObject json = new JSONObject(message);
-            Log.i(ProductActivity.class.getName(), json.toString());
-            Fragment productFragment = getFragmentManager().findFragmentById(R.id.product_fragment);
-            if (productFragment!=null) {
-                View productView = productFragment.getView();
-                img = (ImageView)findViewById(R.id.product_image);
-                new LoadImage().execute(json.getString("ImageUri"));
-                TextView product_label = (TextView) productView.findViewById(R.id.product_label);
-                if (product_label != null)
-                    product_label.setText(json.getString("Name"));
-                TextView price_value = (TextView) productView.findViewById(R.id.price_value);
-                if (price_value != null)
-                    price_value.setText(json.getString("Price"));
-                TextView stock_value = (TextView) productView.findViewById(R.id.stock_value);
-                if (stock_value != null)
-                    stock_value.setText(json.getString("Stock"));
-            }
-
-        } catch (Exception e)
-        {
-            Log.e(ProductActivity.class.getName(), e.getMessage());
-        }
-    }
-
-    private class LoadImage extends AsyncTask<String, String, Bitmap> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(ProductActivity.this);
-            pDialog.setMessage("@string/loading_image_msg");
-            pDialog.show();
-        }
-        protected Bitmap doInBackground(String... args) {
-            try {
-                bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
-            } catch (Exception e) {
-                Log.e("LoadImage", e.getMessage());
-            }
-            return bitmap;
-        }
-        protected void onPostExecute(Bitmap image) {
-            if(image != null){
-                img.setImageBitmap(image);
-                pDialog.dismiss();
-            }else{
-                pDialog.dismiss();
-                Toast.makeText(ProductActivity.this, "@string/image_not_found", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -137,6 +94,66 @@ public class ProductActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_product, container, false);
             return rootView;
+        }
+
+        @Override
+        public void onViewCreated(android.view.View view, android.os.Bundle savedInstanceState)
+        {
+            try {
+                View productView = view;
+                ImageView img = (ImageView)view.findViewById(R.id.product_image);
+                ProductActivity activity = (ProductActivity)view.getContext();
+                new LoadImage(view).execute(activity.json.getString("ImageUri"));
+                TextView product_label = (TextView) productView.findViewById(R.id.product_label);
+                if (product_label != null)
+                    product_label.setText(activity.json.getString("Name"));
+                TextView price_value = (TextView) productView.findViewById(R.id.price_value);
+                if (price_value != null)
+                    price_value.setText(activity.json.getString("Price"));
+                TextView stock_value = (TextView) productView.findViewById(R.id.stock_value);
+                if (stock_value != null)
+                    stock_value.setText(activity.json.getString("Stock"));
+            } catch (Exception e)
+            {
+                Log.e(ProductActivity.class.getName(), e.getMessage());
+            }
+        }
+
+        private class LoadImage extends AsyncTask<String, String, Bitmap> {
+            View _view;
+            LoadImage(View view) {
+                _view = view;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //pDialog = new ProgressDialog(ProductActivity.this);
+                //pDialog.setMessage("@string/loading_image_msg");
+                //pDialog.show();
+            }
+
+            protected Bitmap doInBackground(String... args) {
+                try {
+
+                    Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
+                    return bitmap;
+                } catch (Exception e) {
+                    Log.e("LoadImage", e.getMessage());
+                }
+                return null;
+            }
+            protected void onPostExecute(Bitmap image) {
+                if(image != null){
+                    ImageView img = (ImageView)_view.findViewById(R.id.product_image);
+                    img.setImageBitmap(image);
+                    img.setImageBitmap(image);
+                    //pDialog.dismiss();
+                }else{
+                    //pDialog.dismiss();
+                    Toast.makeText((ProductActivity)_view.getContext(), "@string/image_not_found", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }

@@ -53,7 +53,18 @@ public class LiveCardMenuActivity extends Activity {
         {
             String qrType = data.getStringExtra("qr_type");
             String qrData = data.getStringExtra("qr_data");
-            Toast.makeText(this, "QRCODE Type:" + qrType + "\r\n" + qrData, Toast.LENGTH_LONG).show();
+            if (qrData.startsWith("http://product:")) {
+                new HttpAsyncTask().execute("http://192.168.0.26/kanguru/api/product/open?id=" + qrData.substring(15));
+                //Intent productIntent = new Intent(this, ProductActivity.class);
+                //productIntent.putExtra(EXTRA_MESSAGE, )
+                //startActivityForResult(productIntent, 2);
+
+                //http://192.168.0.26/kanguru/api/product/open?id=123456
+            }
+            if (qrData.startsWith("customer:")) {
+
+            }
+            //this.findViewById(1).requestFocus()
         }
     }
 
@@ -122,7 +133,7 @@ public class LiveCardMenuActivity extends Activity {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             Intent products = new Intent(getApplicationContext(), ProductActivity.class);
             products.putExtra(EXTRA_MESSAGE, productItems);
-            startActivity(products);
+            startActivityForResult(products, 1);
         }
     }
 
