@@ -49,4 +49,5 @@ public class LiveCardService extends Service {
         }
         super.onDestroy();
     }
+
 }

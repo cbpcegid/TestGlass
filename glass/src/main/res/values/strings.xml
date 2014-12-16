@@ -5,6 +5,6 @@
     <string name="title_activity_live_card_service">Cegid Glass Demo</string>
     <string name="action_stop">Stop</string>
     <string name="action_httpget">Get</string>
-    <string name="hello_world">Hello. Wellcome to Cegid Glass Demo !</string>
+    <string name="hello_world">Hello. Welcome to Cegid Glass Demo !</string>
 
 </resources>
