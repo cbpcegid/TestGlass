@@ -7,7 +7,9 @@
     <string name="action_httpget">Get</string>
     <string name="action_capture">Capture</string>
     <string name="hello_world">Hello. Welcome to Cegid Glass Demo !</string>
+    <string name="title_activity_product">ProductActivity</string>
+    <string name="product_description">Fiche produit</string>
+    <string name="product_fragment">product_fragment</string>
     <string name="title_activity_child">childActivity</string>
-    <string name="action_settings">Settings</string>
 
 </resources>

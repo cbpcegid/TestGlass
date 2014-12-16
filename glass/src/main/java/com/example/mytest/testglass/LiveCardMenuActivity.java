@@ -26,6 +26,8 @@ import java.io.InputStreamReader;
  */
 public class LiveCardMenuActivity extends Activity {
 
+    public final static String EXTRA_MESSAGE = "com.example.mytest.testglass.PRODUCTS_MESSAGE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,16 +108,21 @@ public class LiveCardMenuActivity extends Activity {
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
+        private String productItems = "";
 
         @Override
         protected String doInBackground(String... urls) {
 
-            return GET(urls[0]);
+            productItems = GET(urls[0]);
+            return productItems;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            Intent products = new Intent(getApplicationContext(), ProductActivity.class);
+            products.putExtra(EXTRA_MESSAGE, productItems);
+            startActivity(products);
         }
     }
 
