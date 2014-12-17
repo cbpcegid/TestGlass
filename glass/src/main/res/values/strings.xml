@@ -4,7 +4,7 @@
     <string name="app_name">Cegid Glass Demo</string>
     <string name="title_activity_live_card_service">Cegid Glass Demo</string>
     <string name="action_stop">Stop</string>
-    <string name="action_httpget">Get</string>
+    <string name="action_httpget">SMS</string>
     <string name="action_capture">Capture</string>
     <string name="hello_world">Hello. Welcome to Cegid Glass Demo !</string>
     <string name="title_activity_product">ProductActivity</string>

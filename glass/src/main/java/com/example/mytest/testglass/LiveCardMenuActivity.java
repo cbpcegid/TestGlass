@@ -3,6 +3,7 @@ package com.example.mytest.testglass;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -162,11 +163,11 @@ public class LiveCardMenuActivity extends Activity {
 
                 return true;
             case R.id.action_httpget:
-                String phoneNo = "+33...";
-                String sms = "Hello Pierrot";
+                String phoneNo = "+33.....";
+                String sms = "Hello Dream team from Cegid Demo";
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+                    smsManager.sendTextMessage(phoneNo, "+33....", sms, null, null);
                     Toast.makeText(getApplicationContext(), "SMS Sent!",
                             Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
