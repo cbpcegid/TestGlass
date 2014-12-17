@@ -21,6 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+//interface du handler de méthode
+interface IPostExecuteHandler {
+
+    void execute(String result);
+}
+
 /**
  * A transparent {@link Activity} displaying a "Stop" options menu to remove the {@link com.example.mytest.testglass.LiveCardMenuActivity}.
  */
@@ -54,14 +60,15 @@ public class LiveCardMenuActivity extends Activity {
             String qrType = data.getStringExtra("qr_type");
             String qrData = data.getStringExtra("qr_data");
             if (qrData.startsWith("http://product:")) {
-                new HttpAsyncTask().execute("http://192.168.0.26/kanguru/api/product/open?id=" + qrData.substring(15));
+                new HttpAsyncTask(new CaptureProductHandler()).execute("http://192.168.0.26/kanguru/api/product/open?id=" + qrData.substring(15));
                 //Intent productIntent = new Intent(this, ProductActivity.class);
                 //productIntent.putExtra(EXTRA_MESSAGE, )
                 //startActivityForResult(productIntent, 2);
 
                 //http://192.168.0.26/kanguru/api/product/open?id=123456
             }
-            if (qrData.startsWith("customer:")) {
+            if (qrData.startsWith("http://customer:")) {
+                new HttpAsyncTask(new CaptureCustomerHandler()).execute("http://192.168.0.26/kanguru/api/customer/open?id=" + qrData.substring(16));
 
             }
             //this.findViewById(1).requestFocus()
@@ -78,7 +85,7 @@ public class LiveCardMenuActivity extends Activity {
 
                 return true;
             case R.id.action_httpget:
-                new HttpAsyncTask().execute("http://192.168.0.26/kanguru/api/product/current");
+                new HttpAsyncTask(new CaptureProductHandler()).execute("http://192.168.0.26/kanguru/api/product/current");
                 return true;
             case R.id.action_stop:
                 // Stop the service which will unpublish the live card.
@@ -117,8 +124,14 @@ public class LiveCardMenuActivity extends Activity {
         return result;
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+       private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
+       IPostExecuteHandler _handler;
+
+        public HttpAsyncTask(IPostExecuteHandler handler)
+        {
+            _handler = handler;
+        }
         private String productItems = "";
 
         @Override
@@ -130,10 +143,24 @@ public class LiveCardMenuActivity extends Activity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            _handler.execute(productItems);
+        }
+    }
+
+    private class CaptureProductHandler implements IPostExecuteHandler
+    {
+        public void execute(String result) {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             Intent products = new Intent(getApplicationContext(), ProductActivity.class);
-            products.putExtra(EXTRA_MESSAGE, productItems);
+            products.putExtra(EXTRA_MESSAGE, result);
             startActivityForResult(products, 1);
+        }
+    }
+
+    private class CaptureCustomerHandler implements IPostExecuteHandler
+    {
+        public void execute(String result) {
+            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
         }
     }
 
