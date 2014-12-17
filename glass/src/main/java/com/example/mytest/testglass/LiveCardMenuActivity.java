@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.Toast;
+import android.telephony.SmsManager;
 
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
@@ -161,7 +162,19 @@ public class LiveCardMenuActivity extends Activity {
 
                 return true;
             case R.id.action_httpget:
-                new HttpAsyncTask(new CaptureProductHandler()).execute("http://192.168.0.26/kanguru/api/product/current");
+                String phoneNo = "+33...";
+                String sms = "Hello Pierrot";
+                try {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+                    Toast.makeText(getApplicationContext(), "SMS Sent!",
+                            Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            "SMS faild, please try again later!",
+                            Toast.LENGTH_LONG).show();
+                    Log.e("Sms send error", e.getMessage());
+                }
                 return true;
             case R.id.action_stop:
                 // Stop the service which will unpublish the live card.
