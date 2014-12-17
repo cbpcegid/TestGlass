@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TestGlass</string>
+    <string name="app_name">Cegid Glass Demo</string>
     <string name="title_activity_live_card_service">Cegid Glass Demo</string>
     <string name="action_stop">Stop</string>
     <string name="action_httpget">Get</string>
@@ -13,5 +13,6 @@
     <string name="title_activity_child">childActivity</string>
     <string name="loading_image_msg">Chargement de l\'\image ....</string>
     <string name="image_not_found">Aucune image pour cet article ....</string>
+    <string name="glass_voice_trigger">cegid demo</string>
 
 </resources>

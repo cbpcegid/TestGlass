@@ -1,14 +1,20 @@
 package com.example.mytest.testglass;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.Window;
 import android.widget.Toast;
 
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
+import com.google.android.glass.view.WindowUtils;
 import com.jaxbot.glass.barcode.scan.CaptureActivity;
 
 import org.apache.http.HttpResponse;
@@ -32,18 +38,89 @@ interface IPostExecuteHandler {
  */
 public class LiveCardMenuActivity extends Activity {
 
+    private GestureDetector mGestureDetector;
+
     public final static String EXTRA_MESSAGE = "com.example.mytest.testglass.PRODUCTS_MESSAGE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
+        //getWindow().requestFeature(Window.FEATURE_OPTIONS_PANEL);
+        mGestureDetector = createGestureDetector(this);
+        setContentView(R.layout.live_card);
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         // Open the options menu right away.
-        openOptionsMenu();
+        //openOptionsMenu();
+    }
+
+
+    private GestureDetector createGestureDetector(Context context) {
+        GestureDetector gestureDetector = new GestureDetector(context);
+
+        //Create a base listener for generic gestures
+        gestureDetector.setBaseListener( new GestureDetector.BaseListener() {
+            @Override
+            public boolean onGesture(Gesture gesture) {
+                if (gesture == Gesture.TAP) {
+                    openOptionsMenu();
+                    return true;
+                } else if (gesture == Gesture.TWO_TAP) {
+                    // do something on two finger tap
+                    return true;
+                } else if (gesture == Gesture.SWIPE_RIGHT) {
+                    // do something on right (forward) swipe
+                    return true;
+                } else if (gesture == Gesture.SWIPE_LEFT) {
+                    // do something on left (backwards) swipe
+                    return true;
+                } else if (gesture == Gesture.SWIPE_DOWN){
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        gestureDetector.setFingerListener(new GestureDetector.FingerListener() {
+            @Override
+            public void onFingerCountChanged(int previousCount, int currentCount) {
+                // do something on finger count changes
+            }
+        });
+
+        gestureDetector.setScrollListener(new GestureDetector.ScrollListener() {
+            @Override
+            public boolean onScroll(float displacement, float delta, float velocity) {
+                // do something on scrolling
+                return true;
+            }
+        });
+
+        return gestureDetector;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mGestureDetector != null) {
+            return mGestureDetector.onMotionEvent(event);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        if (featureId == WindowUtils.FEATURE_VOICE_COMMANDS ||
+                featureId == Window.FEATURE_OPTIONS_PANEL) {
+            getMenuInflater().inflate(R.menu.live_card, menu);
+            return true;
+        }
+        // Pass through to super to setup touch menu.
+        return super.onCreatePanelMenu(featureId, menu);
     }
 
     @Override
@@ -75,12 +152,11 @@ public class LiveCardMenuActivity extends Activity {
         }
     }
 
-  @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private boolean doCommand(MenuItem item)
+    {
         switch (item.getItemId()) {
             case R.id.action_capture:
                 Intent captureIntent = new Intent(this, CaptureActivity.class);
-                //Intent captureIntent = new Intent(this, childActivity.class);
                 startActivityForResult(captureIntent, 2);
 
                 return true;
@@ -92,9 +168,23 @@ public class LiveCardMenuActivity extends Activity {
                 stopService(new Intent(this, LiveCardService.class));
                 finish();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (!doCommand(item)) {
+            return super.onMenuItemSelected(featureId, item);
+        }
+        return true;
+    }
+
+  @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      if (!doCommand(item))
+          return super.onOptionsItemSelected(item);
+      return true;
     }
 
     public static String GET(String url){
